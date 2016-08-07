@@ -1,0 +1,32 @@
+sitemap demo label="Система"
+{
+    Frame {
+        Group item=System label="Використання ресурсів" icon="info" {
+            Frame {
+                Text item=uptimeFormatted //icon="system"
+            }
+
+            Frame label="Load" {
+                Text item=loadAverage1min
+                Text item=loadAverage5min
+                Text item=loadAverage15min
+            }
+
+            Frame label="Memory" {
+                Text item=memUsedPercent
+                Text item=memFreePercent
+                Text item=memUsed
+                Text item=memActualUsed
+                Text item=memActualFree
+                Text item=memTotal
+            }
+
+            Frame label="Swap" {
+                Text item=swapFree
+                Text item=swapTotal
+                Text item=swapUsed
+            }
+        }
+    }
+}
+

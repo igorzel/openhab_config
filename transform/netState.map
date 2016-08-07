@@ -1,0 +1,5 @@
+ON=online
+OFF=offline
+online=ON
+offline=OFF
+-=

@@ -1,0 +1,69 @@
+import java.lang.Integer
+import java.lang.Double
+
+import org.openhab.core.library.types.*
+import org.openhab.core.library.items.*
+import org.openhab.model.script.actions.Timer
+
+rule
+    "IPresence"
+when
+    Item gNetStateProxyI changed
+then
+    if (gNetStateProxyI.state==ON)
+    {
+        presence_I.postUpdate(ON)
+    }
+    else
+    {
+        presence_I.postUpdate(OFF)
+    }
+end
+
+rule
+    "MPresence"
+when
+    Item gNetStateProxyM changed
+then
+    if (gNetStateProxyM.state==ON)
+    {
+        presence_M.postUpdate(ON)
+    }
+    else
+    {
+        presence_M.postUpdate(OFF)
+    }
+end
+
+rule "Good Morning"
+when
+    Time cron "0 0 8 ? * *"
+then
+    pushover("Доброго ранку!")
+end
+
+rule "New year"
+when
+    Time cron "0 0 0 1 * ?"
+then
+    pushover("З Новим Роком!")
+end
+
+rule "Good Night"
+when
+    Time cron "0 0 0 ? * *"
+then
+    pushover("Надобраніч!")
+end
+
+rule "Date update"
+when
+    Time cron "0 1 0 * * ?"
+then
+    //pushover("Надобраніч!")
+    var date = now()
+    var dateStr = String::format("%02d.%02d.%04d", date.getDayOfMonth(), date.getMonthOfYear(), date.getYear())
+    CurrentDate.postUpdate(dateStr)
+    logInfo("TestRule","Date update " + dateStr)
+end
+

@@ -1,0 +1,89 @@
+sitemap demo label="Дім"
+{
+    Frame {
+        Group label="Безпека" icon="door-closed" {
+            Frame label="Вхідні двері" {
+                Text item=Door label="Замок [MAP(door.map):%s]" valuecolor=[OPEN="red"] icon="lock"
+                Text item=netStateProxy_Door label="Вхідні двері [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] visibility=[netStateProxy_Door=="OFF"] icon="door-closed"
+                Text item=DoorLastOpen label="Відчинено востаннє [%1$tm/%1$td %1$tH:%1$tM]"
+                Text item=DoorLastClosed label="Зачинено востаннє [%1$tm/%1$td %1$tH:%1$tM]"
+            }
+        }
+    }
+
+    Frame {
+        Group label="Клімат" icon="temperature" {
+            Frame label="Спальня" {
+                Text item=TemperatureBedroom label="Температура [%.01f°C]" icon="temperature"
+                Text item=HumidityBedroom label="Вологість [%.01f%%]" icon="humidity"
+
+                Switch item=ClimateBedroom_chartPeriod label="" mappings=[0="4 год", 1="1 доба", 2="1 т-нь"]
+
+                Chart item=gBedroom period=4h refresh=60000 visibility=[ClimateBedroom_chartPeriod==0, ClimateBedroom_chartPeriod=="Uninitialized"]
+                Chart item=gBedroom period=D refresh=300000 visibility=[ClimateBedroom_chartPeriod==1]
+                Chart item=gBedroom period=W refresh=300000 visibility=[ClimateBedroom_chartPeriod==2]
+            }
+        }
+    }
+
+    Frame {
+        Group label="Використання ресурсів" icon="resources" {
+            Group label="Газ" icon="gas" {
+                Frame {
+                    Text item=meter_Gas label="Лічильник [%.03f м3]" icon="gas"
+                }
+
+                Frame {
+                    Text item=meter_Gas_perMinuteUsage label="За останню хвилину [%s]"
+                    Text item=meter_Gas_perHourUsage label="За попередню годину [%s]"
+                    Text item=meter_Gas_perDayUsage label="Сьогодні [%s]"
+                    Text item=meter_Gas_perYesterdayUsage label="Вчора [%s]"
+                    Text item=meter_Gas_perBeforeYesterdayUsage label="Позавчора [%s]"
+                }
+                Frame {
+                    Switch item=meter_Gas_chartPeriod label="Похвилино" mappings=[0="1 доба", 1="3 доби"]
+
+                    Chart item=meter_Gas_perMinute period=D refresh=10000 visibility=[meter_Gas_chartPeriod==0, meter_Gas_chartPeriod=="Uninitialized"]
+                    Chart item=meter_Gas_perMinute period=3D refresh=300000 visibility=[meter_Gas_chartPeriod==1]
+                }
+                Frame {
+                    Switch item=meter_Gas_chartHourPeriod label="Погодинно" mappings=[0="1 доба", 2="3 доби", 3="1 т-нь"]
+
+                    Chart item=meter_Gas_perHour period=D refresh=600000 visibility=[meter_Gas_chartHourPeriod==0, meter_Gas_chartHourPeriod=="Uninitialized"]
+                    Chart item=meter_Gas_perHour period=3D refresh=600000 visibility=[meter_Gas_chartHourPeriod==1]
+                    Chart item=meter_Gas_perHour period=W refresh=600000 visibility=[meter_Gas_chartHourPeriod==2]
+                }
+            }
+            Group label="Електроенергія" icon="energy" {
+                Text item=meter_Electricity label="Лічильник [%d]" icon="energy"
+            }
+            Group label="Вода" icon="water" {
+                Text item=meter_Water label="Лічильник [%d]" icon="water"
+            }
+        }
+    }
+
+    Frame {
+        Group label="Стан мережевих пристроїв" icon="phone" {
+
+            Frame label="Загальні" {
+                Text item=netStateProxy_TV label="Телевізор [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="television"
+                Text item=netStateProxy_Door label="Вхідні двері [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="door-closed"
+                Text item=netStateProxy_MeterGas label="Лічильник газу [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="gas"
+            }
+
+            Frame label="М" {
+                Text item=netStateProxy_MPhone label="Телефон [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="phone"
+                Text item=netStateProxy_MTablet label="Планшет [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="tablet"
+                Text item=netStateProxy_MLaptop label="Ноутбук [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="laptop"
+            }
+
+            Frame label="І" {
+                Text item=netStateProxy_IPhone label="Телефон [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="phone"
+                Text item=netStateProxy_ITablet label="Планшет [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="tablet"
+                Text item=netStateProxy_ILaptop label="Ноутбук [MAP(netState.map):%s]" valuecolor=[ON="green", OFF="grey"] icon="laptop"
+            }
+        }
+    }
+}
+

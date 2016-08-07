@@ -1,0 +1,25 @@
+//-----------------------------------------------------------------------------
+// System info
+//-----------------------------------------------------------------------------
+
+Group System
+
+String uptimeFormatted  "Uptime [%s]" (System) { systeminfo="UptimeFormatted:60000" }
+
+Number loadAverage1min  "Load avg. 1min [%.1f]"     (System) { systeminfo="LoadAverage1Min:5000" }
+Number loadAverage5min  "Load avg. 5min [%.1f]"     (System) { systeminfo="LoadAverage5Min:30000" }
+Number loadAverage15min "Load avg. 15min [%.1f]"    (System) { systeminfo="LoadAverage15Min:30000" }
+
+Number memFreePercent       "Mem free [%.1f%%]"             (System) { systeminfo="MemFreePercent:20000" }
+Number memUsed              "Mem used [%.1f]"               (System) { systeminfo="MemUsed:20000" }
+Number memUsedPercent       "Mem used [%.1f%%]"             (System) { systeminfo="MemUsedPercent:20000" }
+Number memActualFree        "Mem actual free [%.1f]"        (System) { systeminfo="MemActualFree:20000" }
+Number memActualUsed        "Mem actual used [%.1f]"        (System) { systeminfo="MemActualUsed:20000" }
+Number memTotal             "Mem total [%.1f]"              (System) { systeminfo="MemTotal:20000" }
+
+Number swapFree             "Swap free [%.1f]"      (System) { systeminfo="SwapFree:60000" }
+Number swapTotal            "Swap total [%.1f]"     (System) { systeminfo="SwapTotal:60000" }
+Number swapUsed             "Swap used [%.1f]"      (System) { systeminfo="SwapUsed:60000" }
+Number swapPageIn           "Swap pagein [%.1f]"    (System) { systeminfo="SwapPageIn:60000" }
+Number swapPageOut          "Swap pageout [%.1f]"   (System) { systeminfo="SwapPageOut:60000" }
+

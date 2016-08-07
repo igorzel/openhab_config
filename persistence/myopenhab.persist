@@ -1,0 +1,9 @@
+Strategies {
+    default = everyChange
+}
+
+Items {
+    meter_Electricity : strategy = everyChange    
+    meter_Gas_perYesterdayHistory : strategy = everyChange
+}
+

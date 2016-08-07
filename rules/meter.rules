@@ -1,0 +1,106 @@
+import java.lang.Integer
+import java.lang.Double
+
+import org.openhab.core.library.types.*
+import org.openhab.core.library.items.*
+import org.openhab.model.script.actions.Timer
+
+//var Double gasMeterOneMinuteAgo = 0;
+
+rule
+    "Gas sensor update"
+when
+    Item meter_Gas_counter changed
+then
+    var Integer sensorValue = (meter_Gas_counter.state as DecimalType).intValue
+    var Double gasMeterValue = (1154912 + sensorValue * 1.11066) / 1000.0
+
+    meter_Gas.postUpdate(gasMeterValue)
+    //logInfo("TestRule", "Gas meter updeated to: " + gasMeterValue)
+end
+
+rule
+    "Gas per minute"
+when
+    Time cron "0 * * * * ?"
+then
+    var perMinuteDelta = meter_Gas.deltaSince(now.minusMinutes(1)) as DecimalType
+    var perDayDelta = meter_Gas.deltaSince(now.withTimeAtStartOfDay()) as DecimalType
+
+    var Number perMinute = 0
+    var Number perDay = 0
+    var Number perHour = (meter_Gas_perHour.state as DecimalType).doubleValue
+
+    if (null != perMinuteDelta)
+    {
+        perMinute = perMinuteDelta
+    }
+
+    if (null != perDayDelta)
+    {
+        perDay = perDayDelta
+    }
+
+    var Number cost = 3.6
+    var Number perMinuteCost = perMinute * cost
+    var Number perHourCost = perHour * cost
+    var Number perDayCost = perDay * cost
+
+    meter_Gas_perMinute.postUpdate(perMinute)
+    meter_Gas_perDay.postUpdate(perDay)
+
+    var perDayUsageText = String::format("%.03f м3, %.02f грн", perDay.doubleValue, perDayCost.doubleValue)
+
+    meter_Gas_perMinuteUsage.postUpdate(String::format("%.03f м3, %.02f грн", perMinute.doubleValue, perMinuteCost.doubleValue))
+    meter_Gas_perDayUsage.postUpdate(perDayUsageText)
+    meter_Gas_perHourUsage.postUpdate(String::format("%.03f м3, %.02f грн", perHour.doubleValue, perHourCost.doubleValue))
+
+    meter_Gas_perDayUsageWidget.postUpdate("Газ " + perDayUsageText)
+    //logInfo("TestRule","Gas per 1 minute: " + perMinute)
+    //logInfo("TestRule","Gas per day: " + perDay)
+end
+
+rule
+    "Gas per hour"
+when
+    Time cron "0 0 * * * ?"
+then
+    var perHourDelta = meter_Gas.deltaSince(now.minusHours(1)) as DecimalType
+    var Number perHour = 0
+
+    if (null != perHourDelta)
+    {
+        perHour = perHourDelta
+    }
+
+    meter_Gas_perHour.postUpdate(perHour)
+end
+
+rule "Day change"
+when
+    Time cron "0 58 23 * * ?"
+then
+    meter_Gas_perBeforeYesterday.postUpdate(meter_Gas_perYesterday.state)
+    meter_Gas_perYesterday.postUpdate(meter_Gas_perDay.state)
+    meter_Gas_perYesterdayHistory.postUpdate(meter_Gas_perDay.state)
+
+    meter_Gas_perBeforeYesterdayUsage.postUpdate(meter_Gas_perYesterdayUsage.state)
+    meter_Gas_perYesterdayUsage.postUpdate(meter_Gas_perDayUsage.state)
+
+    pushover("Використання газу за сьогодні: " + meter_Gas_perDayUsage.state)
+    
+end
+
+rule
+    "Gas history"
+when
+    Item meter_Gas_perYesterdayHistory changed
+then
+    if (meter_Gas_perYesterdayHistory.state > 0)
+    {
+        createTimer(now.plusMinutes(1)) [|
+            meter_Gas_perYesterdayHistory.postUpdate(0)
+        ]
+    }
+end
+

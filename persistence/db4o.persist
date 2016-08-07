@@ -1,0 +1,13 @@
+Strategies {
+    everyMinute : "0 * * * * ?"
+    everyHour : "0 0 * * * ?"
+}
+
+Items {
+    DoorLastOpen : strategy = everyChange, restoreOnStartup
+    DoorLastClosed : strategy = everyChange, restoreOnStartup
+    meter_Gas_perDayUsage : strategy = everyChange, restoreOnStartup
+    meter_Gas_perYesterdayUsage : strategy = everyChange, restoreOnStartup
+    meter_Gas_perBeforeYesterdayUsage : strategy = everyChange, restoreOnStartup
+}
+

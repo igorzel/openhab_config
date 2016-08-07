@@ -1,0 +1,79 @@
+//-----------------------------------------------------------------------------
+// Date and time
+//-----------------------------------------------------------------------------
+String CurrentDate
+
+
+//-----------------------------------------------------------------------------
+// Climate
+//-----------------------------------------------------------------------------
+Group gBedroom
+
+Number TemperatureBedroom (gBedroom) {mqtt="<[mosquitto:/bedroom/temp:state:default]"}
+Number HumidityBedroom (gBedroom) {mqtt="<[mosquitto:/bedroom/humi:state:default]"}
+
+Number ClimateBedroom_chartPeriod
+
+String TemperatureWidget
+String HumidityWidget
+
+
+//-----------------------------------------------------------------------------
+// Lights
+//-----------------------------------------------------------------------------
+
+Group Control
+Switch LampSwitch  (Control)
+
+
+//-----------------------------------------------------------------------------
+// Security
+//-----------------------------------------------------------------------------
+
+Group Security
+Contact Door {mqtt="<[mosquitto:/door/state:state:default]"}
+DateTime DoorLastOpen
+DateTime DoorLastClosed
+
+
+//-----------------------------------------------------------------------------
+// Resources
+//-----------------------------------------------------------------------------
+
+Group Resources
+Number meter_Gas_counter
+Number meter_Gas
+
+Number meter_Gas_perMinute
+String meter_Gas_perMinuteUsage
+
+Number meter_Gas_perHour
+String meter_Gas_perHourUsage
+
+Number meter_Gas_perDay
+String meter_Gas_perDayUsage
+String meter_Gas_perDayUsageWidget
+
+Number meter_Gas_perYesterday
+String meter_Gas_perYesterdayUsage
+
+Number meter_Gas_perBeforeYesterday
+String meter_Gas_perBeforeYesterdayUsage
+
+Number meter_Gas_chartPeriod
+Number meter_Gas_chartHourPeriod
+
+Number meter_Electricity
+
+Number meter_Water
+
+Number meter_Gas_perYesterdayHistory
+
+//-----------------------------------------------------------------------------
+// Presence
+//-----------------------------------------------------------------------------
+
+Switch presence_M
+Switch presence_I
+
+

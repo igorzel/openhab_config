@@ -1,0 +1,9 @@
+sitemap demo label="Налаштування"
+{
+    Frame label="Логування" {
+        Switch item=Settings_EnableGasLogging label="Показники газу"
+        Switch item=Settings_EnableTemperatureLogging label="Температура"
+    }
+
+}
+

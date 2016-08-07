@@ -1,0 +1,24 @@
+//-----------------------------------------------------------------------------
+// Network health
+//-----------------------------------------------------------------------------
+
+Group gNetStateProxy
+Group:Switch:OR(ON, OFF) gNetStateProxyM
+Group:Switch:OR(ON, OFF) gNetStateProxyI
+
+Switch netStateProxy_test
+Switch netStateProxy_TV                                               { nh="192.168.0.50" }
+Switch netStateProxy_Door                                             { mqtt="<[mosquitto:/door/net:state:default]" }
+
+Switch netStateProxy_MeterGas                                         { nh="192.168.0.60" }
+
+Switch netStateProxy_IPhone                    (gNetStateProxyI)      { nh="192.168.0.81" }
+Switch netStateProxy_ITablet                   (gNetStateProxyI)
+Switch netStateProxy_ILaptop                   (gNetStateProxyI)      { nh="192.168.0.83" }
+
+Switch netStateProxy_MPhone                    (gNetStateProxyM)      { nh="192.168.0.91" }
+Switch netStateProxy_MTablet                   (gNetStateProxyM)      { nh="192.168.0.92" }
+Switch netStateProxy_MLaptop                   (gNetStateProxyM)
+
+DateTime netStateLastUpdate_test       "Last seen [%1$ta %1$tR]"
+

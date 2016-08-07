@@ -1,0 +1,77 @@
+import java.lang.Integer
+import java.lang.Double
+
+import org.openhab.core.library.types.*
+import org.openhab.core.library.items.*
+import org.openhab.model.script.actions.Timer
+
+import java.util.concurrent.locks.ReentrantLock
+
+import org.joda.time.DateTime
+
+var Timer doorAlarmTimer = null
+var java.util.concurrent.locks.ReentrantLock lock1 = new java.util.concurrent.locks.ReentrantLock()
+
+rule "Door open"
+when
+    Item Door changed to OPEN
+then
+    lock1.lock()
+    try 
+    {
+        netStateProxy_Door.postUpdate(ON)
+
+        DoorLastOpen.postUpdate(new DateTimeType())
+
+        if (doorAlarmTimer == null)
+        {
+            doorAlarmTimer = createTimer(now.plusMinutes(4)) [|
+                var DateTime timeDiff = now.minus((DoorLastOpen.state as DateTimeType).calendar.timeInMillis)
+
+                var String message = String::format("Двері відчинено вже %d хвилин!", timeDiff.getMinuteOfHour())
+                pushover(message, 1)
+//		        logInfo("TestRule", message)
+		        
+                doorAlarmTimer.reschedule(now.plusMinutes(1))
+            ]
+        }
+
+        pushover("Двері відчинено")
+        logInfo("TestRule", "Двері відчинено")
+    }
+    finally
+    {
+        lock1.unlock()
+    }
+end
+
+rule "Door closed"
+when
+    Item Door changed to CLOSED
+then
+    lock1.lock()
+    try 
+    {
+        netStateProxy_Door.postUpdate(ON)
+
+        DoorLastClosed.postUpdate(new DateTimeType())
+
+        var DateTime timeDiff = now.minus((DoorLastOpen.state as DateTimeType).calendar.timeInMillis)
+
+        if (doorAlarmTimer != null)
+        {
+            doorAlarmTimer.cancel()
+            doorAlarmTimer = null
+        }
+
+        var String message = String::format("Двері зачинено (було відчинено %d хв %d сек)", timeDiff.getMinuteOfHour(), timeDiff.getSecondOfMinute())
+
+        pushover(message)
+        logInfo("TestRule", message)
+    }
+    finally
+    {
+        lock1.unlock()
+    }
+end
+
