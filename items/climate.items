@@ -1,0 +1,16 @@
+//-----------------------------------------------------------------------------
+// Climate
+//-----------------------------------------------------------------------------
+
+Group gBedroom
+
+Switch GasHeater
+
+Number BedroomTemperature (gBedroom) {mqtt="<[mosquitto:/bedroom/temperature/value:state:default]"}
+Number BedroomTemperatureSetpoint
+
+Number ClimateBedroom_chartPeriod
+
+String TemperatureWidget
+String HumidityWidget
+

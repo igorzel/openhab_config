@@ -41,7 +41,7 @@ then
         perDay = perDayDelta
     }
 
-    var Number cost = 3.6
+    var Number cost = 6.879
     var Number perMinuteCost = perMinute * cost
     var Number perHourCost = perHour * cost
     var Number perDayCost = perDay * cost

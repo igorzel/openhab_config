@@ -6,43 +6,54 @@ import org.openhab.core.library.types.*
 import org.openhab.core.library.items.*
 
 
+//------------------------------------------------------------------------
 
-//rule "Day climate report"
-//when
-//    Time cron "0 59 23 * * ?"
-//then
-//    var Number minTemp
-//    var Number maxTemp
-//    var Number averageTemp
-//
-//    var startOfDay = now.withTimeAtStartOfDay()
-//    minTemp = TemperatureBedroom.minimumSince(startOfDay).state as DecimalType
-//    maxTemp = TemperatureBedroom.maximumSince(startOfDay).state as DecimalType
-//    averageTemp= TemperatureBedroom.averageSince(startOfDay) as DecimalType
-//
-//    var daylyReport = String::format("Температура за сьогодні: мінімальна %.01f°C, максимальна %.01f°C, середня %.01f°C", minTemp.doubleValue, maxTemp.doubleValue, averageTemp.doubleValue)
-//    //logInfo("TestRule", daylyReport)
-//
-//    pushover(daylyReport)
-//end
+rule "Gas heater settings change"
+when
+    Item Settings_EnableGasHeater changed
+then
+	BedroomTemperatureSetpoint.postUpdate(21)
+	GasHeater.postUpdate(OFF)
+end
+
+//------------------------------------------------------------------------
+
+rule "Initialize heating states"
+when
+	System started
+then
+	BedroomTemperatureSetpoint.postUpdate(21)
+	GasHeater.postUpdate(OFF)
+end
+
+//------------------------------------------------------------------------
+
+rule "Gas heater"
+when
+    Item BedroomTemperature changed or
+    Item BedroomTemperatureSetpoint changed
+then
+	var Number setpoint = BedroomTemperatureSetpoint.state as DecimalType
+	var Number currentTemp = BedroomTemperature.state as DecimalType
+    val hysteresis = 0.5
+    
+    if (currentTemp <= (setpoint - hysteresis)) {
+		GasHeater.postUpdate(ON)
+	} else if (currentTemp >= (setpoint + hysteresis)) {
+		GasHeater.postUpdate(OFF)
+	}
+end
+
+//------------------------------------------------------------------------
 
 rule
     "Temperature changed"
 when
-    Item TemperatureBedroom changed
+    Item BedroomTemperature changed
 then
-    var Number currentTemp = TemperatureBedroom.state as DecimalType
+    var Number currentTemp = BedroomTemperature.state as DecimalType
 
     TemperatureWidget.postUpdate(String::format("maroon Температура %.01f°C", currentTemp.doubleValue))
 end
 
-rule
-    "Humidity changed"
-when
-    Item HumidityBedroom changed
-then
-    var Number currentHumi = HumidityBedroom.state as DecimalType
-
-    HumidityWidget.postUpdate(String::format("maroon Вологість %.01f%%", currentHumi.doubleValue))
-end
-
+//------------------------------------------------------------------------

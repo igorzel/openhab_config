@@ -1,2 +1,5 @@
-Switch Settings_EnableGasLogging
-Switch Settings_EnableTemperatureLogging
+//-----------------------------------------------------------------------------
+// Climate
+//-----------------------------------------------------------------------------
+
+Switch Settings_EnableGasHeater

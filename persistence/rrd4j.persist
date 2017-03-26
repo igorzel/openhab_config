@@ -9,7 +9,6 @@ Items {
     meter_Gas_perHour : strategy = everyMinute, restoreOnStartup
     meter_Gas_perYesterday : strategy = everyChange, restoreOnStartup
     meter_Gas_perBeforeYesterday : strategy = everyChange, restoreOnStartup
-    TemperatureBedroom : strategy = everyMinute
-    HumidityBedroom : strategy = everyMinute
+    BedroomTemperature : strategy = everyMinute
 }
 

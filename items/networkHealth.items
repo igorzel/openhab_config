@@ -22,3 +22,4 @@ Switch netStateProxy_MLaptop                   (gNetStateProxyM)
 
 DateTime netStateLastUpdate_test       "Last seen [%1$ta %1$tR]"
 
+Switch netStateProxy_BedroomTemperature                               { mqtt="<[mosquitto:/bedroom/temperature/net:state:default]" }

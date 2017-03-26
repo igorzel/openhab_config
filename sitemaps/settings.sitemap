@@ -1,9 +1,11 @@
 sitemap demo label="Налаштування"
 {
-    Frame label="Логування" {
-        Switch item=Settings_EnableGasLogging label="Показники газу"
-        Switch item=Settings_EnableTemperatureLogging label="Температура"
+    Frame {
+        Group label="Клімат" icon="temperature" {
+            Frame label="Котел" {
+            	Switch item=Settings_EnableGasHeater label="Керування котлом"
+            }
+        }
     }
-
 }
 
